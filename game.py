@@ -62,7 +62,7 @@ class Game:
 
         play_human_button = pygame.Rect(x_offset, y_offset, 
                                         button_width, button_height)
-        play_engin_button = pygame.Rect(x_offset, y_offset + button_distance, 
+        play_engine_button = pygame.Rect(x_offset, y_offset + button_distance, 
                                         button_width, button_height)
 
         # checking if any of the 2 buttons have been clicked
@@ -73,7 +73,7 @@ class Game:
                 self.is_playing_human = True
                 self.is_playing_engine = False
                 self.show_menu = False
-            if play_engin_button.collidepoint(mouse_coords[0], mouse_coords[1]):
+            if play_engine_button.collidepoint(mouse_coords[0], mouse_coords[1]):
                 self.is_playing_engine = True
                 self.is_playing_human = False
                 self.show_menu = False
@@ -87,21 +87,25 @@ class Game:
 
         self.window.fill((170, 180, 200))
         pygame.draw.rect(self.window, button_color, play_human_button)
-        pygame.draw.rect(self.window, button_color, play_engin_button)
-        self.window.blit(title_text, (x_offset - 85, self.screen_height / 6))
-        self.window.blit(play_human_text, (x_offset + 10, y_offset - 2))
-        self.window.blit(play_engine_text, (x_offset + 10, y_offset + button_distance - 2))
+        pygame.draw.rect(self.window, button_color, play_engine_button)
+
+        self.window.blit(title_text, (self.screen_width / 2 - 140, self.screen_height / 6))
+        self.window.blit(play_human_text, (play_human_button.x + 10, play_human_button.y))
+        self.window.blit(play_engine_text, (play_engine_button.x + 10, play_engine_button.y))
 
     def showGame(self):
 
+        # updating
         if self.is_playing_engine:
             self.board.playEngine()
         else:
             self.board.playHuman()
 
+        # drawing
         self.board.drawBackground()
         self.board.drawPosition()
 
+        # gameover checks
         if self.board.checkWinner("X", self.board.board):
             self.showWinner("X is the Winner")
             self.gameOver = True
